@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from 'react';
 import {ActivityIndicator, Image, View} from 'react-native';
 import {styles} from './styles';
-import {images} from '../../theme/images';
-import {colors} from '../../theme/colors';
+import {images} from '../../assets/images';
+import {colors} from '../../../ui-kit';
 
 type SplashScreenProps = {
   onConfigSuccess: () => void;

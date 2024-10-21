@@ -39,7 +39,7 @@ const RootNavigator = () => {
       onStateChange={onStateChange}>
       <Stack.Navigator screenOptions={{headerShown: false}}>
         <>
-          {!isOnBoardingViewed ? (
+          {~isOnBoardingViewed ? (
             <Stack.Screen name="OnBoarding" component={OnBoardingScreen} />
           ) : (
             <Stack.Screen

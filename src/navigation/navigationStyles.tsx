@@ -1,5 +1,5 @@
 import {Platform} from 'react-native';
-import {colors} from '../theme/colors';
+import {colors} from '../../ui-kit';
 
 export const tabBarStyles = {
   backgroundColor: '#1789C9',

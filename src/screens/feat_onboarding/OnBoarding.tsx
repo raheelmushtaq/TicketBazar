@@ -1,56 +1,65 @@
-import React, {useEffect, useState} from 'react';
+import React, {useState} from 'react';
 import {Image, View} from 'react-native';
-import {images} from '../../theme/images';
+import {images} from '../../assets/images';
 import useGeneralStore from '../../store/useGeneralStore';
-import {CrouselData} from '../../components/carousel';
 import {styles} from './styles';
 
 // OnboardingScreen.js
 import {useRef} from 'react';
-import {Text, FlatList, TouchableOpacity, Dimensions} from 'react-native';
+import {Text, FlatList} from 'react-native';
+import AppStrings from '../../constants/constants.strings';
+import {SafeAreaView} from 'react-native-safe-area-context';
+import LoginBottomSheet from '../../components/LoginBottomSheet';
+import {Button, Separator} from '../../../ui-kit';
+type CrouselData = {
+  id: number;
+  source: string;
+  heading?: string;
+  description?: string;
+};
 
 const OnBoardingScreen = () => {
   const {updateOnBoarding} = useGeneralStore();
-  useEffect(() => {
-    return () => {
-      handleOnCompleteAndSkip();
-    };
-  }, []);
-  const handleOnCompleteAndSkip = () => {
+  const [isLoginDialogVisible, sertIsLoginDialogVisible] = useState(false);
+
+  const onCompleteAndSkip = () => {
     updateOnBoarding(true);
+  };
+  const onLoginButtonPressed = () => {
+    sertIsLoginDialogVisible(true);
   };
   const onboardingData: CrouselData[] = [
     {
       id: 1,
       source: images.SPLASH_APP_LOGO_3,
-      description: 'Book Flights, Buses & Visa with ease',
+      description: AppStrings.onboadringMessage1,
     },
     {
       id: 2,
       source: images.SPLASH_APP_LOGO_3,
-      description: 'Cancel Your trip for free with Sasta Refund',
+      description: AppStrings.onboardingMessage2,
     },
 
     {
       id: 3,
       source: images.SPLASH_APP_LOGO_3,
-      heading: '24/7 Customer Service',
-      description: 'WhatsApp, Call, Live Chat, Email',
+      heading: AppStrings.onboardingHeading3,
+      description: AppStrings.onboardingMessage3,
     },
   ];
   const flatListRef = useRef<FlatList>(null);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const handleNext = () => {
+  const onNextButtonPressed = () => {
     if (currentIndex < onboardingData.length - 1) {
       flatListRef.current?.scrollToIndex({index: currentIndex + 1});
     } else {
-      handleOnCompleteAndSkip();
+      onCompleteAndSkip();
     }
   };
 
-  const handleSkip = () => {
-    handleOnCompleteAndSkip();
+  const onSkipButtonPressed = () => {
+    onCompleteAndSkip();
   };
 
   const keyExtractor = (item: any) => item.id;
@@ -63,26 +72,63 @@ const OnBoardingScreen = () => {
 
   const viewConfigRef = useRef({viewAreaCoveragePercentThreshold: 50});
 
+  const isLastIndex = currentIndex === onboardingData.length - 1;
+
+  const renderOnBoardingItem = ({item, index}: any) => {
+    return (
+      <View key={index} style={styles.itemContainer}>
+        <Image source={item.source} style={styles.image} resizeMode="contain" />
+        {item.heading && <Text style={styles.heading}>{item.heading}</Text>}
+        <Text style={styles.description}>{item.description}</Text>
+      </View>
+    );
+  };
+  const renderBottomButton = () => {
+    return (
+      <View style={{flex: 1}}>
+        <Button
+          type="primary"
+          title={AppStrings.loginOrSignup}
+          onPress={onLoginButtonPressed}
+        />
+        <Separator showTransparent={true} showVertical={true} />
+        <Button
+          type="secondary"
+          title={AppStrings.loginAsGuest}
+          onPress={onCompleteAndSkip}
+        />
+      </View>
+    );
+  };
+  const renderLoginDialogBottomSheet = () => {
+    if (isLoginDialogVisible) {
+      return (
+        <LoginBottomSheet
+          closeModal={() => {
+            sertIsLoginDialogVisible(false);
+          }}
+          isVisible={isLoginDialogVisible}
+          onLogin={() => {}}
+        />
+      );
+    }
+    return null;
+  };
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <View style={[styles.buttonContainer, {flex: 1}]}>
+        {!isLastIndex && (
+          <Button
+            containerStyle={{marginTop: 20}}
+            title={AppStrings.skip}
+            onPress={onSkipButtonPressed}
+            type="secondary"
+          />
+        )}
+      </View>
       <FlatList
         data={onboardingData}
-        renderItem={data => {
-          const {item} = data;
-          return (
-            <View style={styles.itemContainer}>
-              <Image
-                source={item.source}
-                style={styles.image}
-                resizeMode="contain"
-              />
-              {item.heading && (
-                <Text style={styles.heading}>{item.heading}</Text>
-              )}
-              <Text style={styles.description}>{item.description}</Text>
-            </View>
-          );
-        }}
+        renderItem={renderOnBoardingItem}
         keyExtractor={keyExtractor}
         horizontal
         pagingEnabled
@@ -91,7 +137,6 @@ const OnBoardingScreen = () => {
         onViewableItemsChanged={onViewRef.current}
         viewabilityConfig={viewConfigRef.current}
       />
-
       {/* Pagination Dots */}
       <View style={styles.pagination}>
         {onboardingData.map((_, index) => (
@@ -104,24 +149,19 @@ const OnBoardingScreen = () => {
           />
         ))}
       </View>
-
       {/* Buttons */}
-      <View style={styles.buttonContainer}>
-        {currentIndex !== onboardingData.length - 1 ? (
-          <TouchableOpacity onPress={handleSkip} style={styles.skipButton}>
-            <Text style={styles.buttonText}>Skip</Text>
-          </TouchableOpacity>
-        ) : (
-          <View style={styles.skipButton}></View>
+      <View style={[styles.buttonContainer, {flex: 1}]}>
+        {!isLastIndex && (
+          <Button
+            type={'primary'}
+            title={AppStrings.next}
+            onPress={onNextButtonPressed}
+          />
         )}
-
-        <TouchableOpacity onPress={handleNext} style={styles.nextButton}>
-          <Text style={styles.buttonText}>
-            {currentIndex === onboardingData.length - 1 ? 'Done' : 'Next'}
-          </Text>
-        </TouchableOpacity>
+        {isLastIndex && renderBottomButton()}
       </View>
-    </View>
+      {renderLoginDialogBottomSheet()}
+    </SafeAreaView>
   );
 };
 

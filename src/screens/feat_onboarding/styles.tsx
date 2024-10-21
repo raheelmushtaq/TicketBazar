@@ -1,14 +1,15 @@
 import {StyleSheet} from 'react-native';
-import {colors} from '../../theme/colors';
 import Layout from '../../utils/dimenUtils';
+import {colors} from '../../../ui-kit';
 const width = Layout.SCREEN_WIDTH;
 export const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
+    backgroundColor: colors.background,
   },
   itemContainer: {
     width: width,
+    height: Layout.SCREEN_HEIGHT / 3,
     alignItems: 'center',
     justifyContent: 'center',
     padding: 20,
@@ -49,7 +50,7 @@ export const styles = StyleSheet.create({
   },
   buttonContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-end',
     paddingHorizontal: 30,
     marginBottom: 30,
   },

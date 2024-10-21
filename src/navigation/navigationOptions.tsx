@@ -1,6 +1,6 @@
 // import {TransitionPresets} from '@react-navigation/native-stack';
 
-import {colors} from '../theme/colors';
+import {colors} from '../../ui-kit';
 import {tabBarLabelStyle, tabBarStyles} from './navigationStyles';
 import {Platform} from 'react-native';
 
@@ -11,7 +11,7 @@ export const rootNavigationOptions = {
 export const tabBarScreenOptions = {
   headerShown: false,
   backgroundColor: '#ffffff',
-  tabBarInactiveTintColor: colors.lightGrayIII,
+  tabBarInactiveTintColor: colors.inactiveTabColor,
   tabBarActiveTintColor: colors.white,
   tabBarLabelStyle: tabBarLabelStyle,
   tabBarStyle: tabBarStyles,

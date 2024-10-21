@@ -1,11 +1,10 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import React, {useState} from 'react';
-import {ColorValue, Image, ImageProps, Pressable, Text} from 'react-native';
-import {Stack} from './RootNavigator';
-import {colors} from '../theme/colors';
+import React from 'react';
+import {Image, ImageProps, Text} from 'react-native';
 import {ScreenName} from '../constants/constants.screens';
-import {images} from '../theme/images';
+import {images} from '../assets/images';
 import HomeStackNavigator from './bottom_tabs/HomeStackNavigator';
+import {colors} from '../../ui-kit';
 
 const Tab = createBottomTabNavigator();
 type BottomTabTextProps = {
