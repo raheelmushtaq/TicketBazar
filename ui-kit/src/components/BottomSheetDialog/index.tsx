@@ -1,37 +1,61 @@
 import React from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import Modal from 'react-native-modal';
 import {colors} from '../../theme/colors';
 import {dimensions} from '../../theme/dimensions';
+import {images} from '../../assets/images';
 
 type BottomSheetDialogProps = {
   isVisible: boolean;
   closeModal: () => void;
+  onBackDropPress: () => void;
   header?: string;
   showTopBar?: boolean;
+  showCrossIcon: boolean;
   children: React.ReactNode;
 };
 const BottomSheetDialog = ({
   isVisible,
   closeModal,
+  onBackDropPress,
   header,
   showTopBar = true,
+  showCrossIcon,
   children,
 }: BottomSheetDialogProps) => {
   const renderModalContent = () => (
     <>
       <View style={[styles.modalContent, {backgroundColor: colors.white}]}>
-        {showTopBar && (
-          <View
-            style={{
-              width: 50,
-              height: 10,
-              borderRadius: dimensions.borderRadiusLarge,
-              alignSelf: 'center',
-              backgroundColor: colors.black,
-              marginVertical: 20,
-            }}></View>
-        )}
+        <View style={{flexDirection: 'row', flex: 1, marginVertical: 20}}>
+          {showTopBar && (
+            <View
+              style={{
+                width: 50,
+                height: 10,
+                borderRadius: dimensions.borderRadiusLarge,
+                alignSelf: 'center',
+                backgroundColor: colors.black,
+              }}></View>
+          )}
+          {showCrossIcon && (
+            <Pressable
+              onPress={closeModal}
+              style={{
+                width: 50,
+                height: 50,
+                borderRadius: dimensions.borderRadiusLarge,
+                alignSelf: 'flex-end',
+                backgroundColor: colors.black,
+                marginVertical: 20,
+              }}>
+              <Image
+                source={images.cross}
+                style={{height: 30, width: 30}}
+                tintColor={colors.black}
+              />
+            </Pressable>
+          )}
+        </View>
         {!!header && (
           <Text
             numberOfLines={2}
@@ -61,7 +85,7 @@ const BottomSheetDialog = ({
         backdropColor={colors.background}
         deviceWidth={dimensions.SCREEN_WIDTH}
         deviceHeight={dimensions.SCREEN_HEIGHT}
-        onBackdropPress={closeModal}
+        onBackdropPress={onBackDropPress}
         animationOutTiming={300}
         animationInTiming={300}
         useNativeDriver

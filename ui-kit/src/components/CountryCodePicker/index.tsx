@@ -183,7 +183,6 @@ const CountryCodePicker = ({
           label="Code"
           value={countryCode}
           editable={false}
-          inputStyle={[{color: colors.black}]}
           rightIcon={images.iconArrowDown}
           numberOfLines={1}
         />

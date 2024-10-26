@@ -74,11 +74,7 @@ const LoginBottomSheet = ({isVisible, closeModal}: LoginBottomSheetProps) => {
   );
 
   return (
-    <BottomSheetDialog
-      isVisible={isVisible}
-      showCrossIcon={true}
-      closeModal={closeModal}
-      onBackDropPress={() => {}}>
+    <BottomSheetDialog isVisible={isVisible} closeModal={closeModal}>
       {renderModalContent()}
     </BottomSheetDialog>
   );

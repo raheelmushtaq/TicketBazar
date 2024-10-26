@@ -139,7 +139,7 @@ const InputField = forwardRef<InputFieldHandles, InputFieldProps>(
       setBorderStyle(prevState => ({
         ...prevState,
         borderWidth: 1,
-        borderColor: colors.border,
+        borderColor: colors.black,
       }));
       onBlur?.();
     };
@@ -159,24 +159,20 @@ const InputField = forwardRef<InputFieldHandles, InputFieldProps>(
       </View>
     );
 
-    console.log({rightIcon});
     const renderRightIcon = () => {
+      console.warn(`${rightIcon} ${isPasswordInput}`);
       if (isPasswordInput) {
-        return PasswordVisibilityComponent(
+        return RightIconCompoenent(
           images.iconEye,
-          securePasswordTextEntry ? colors.black : colors.inactiveTabColor,
+          !securePasswordTextEntry ? colors.black : colors.inactiveTabColor,
           handlePasswordVisibility,
         );
       } else if (!!rightIcon) {
-        return PasswordVisibilityComponent(
-          rightIcon,
-          colors.black,
-          onRightIconPress,
-        );
+        return RightIconCompoenent(rightIcon, colors.black, onRightIconPress);
       } else return null;
     };
 
-    const PasswordVisibilityComponent = (
+    const RightIconCompoenent = (
       icon: ImageProps,
       tint: string,
       onPress?: () => void | undefined,
@@ -208,7 +204,7 @@ const InputField = forwardRef<InputFieldHandles, InputFieldProps>(
           ]}>
           {label ? <Label value={label} /> : null}
           {editable ? (
-            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <View style={{flexDirection: 'row', alignItems: 'center', flex: 1}}>
               <InputComponent
                 ref={inputRef}
                 value={value}
@@ -237,18 +233,22 @@ const InputField = forwardRef<InputFieldHandles, InputFieldProps>(
               {renderRightIcon()}
             </View>
           ) : (
-            <Text
-              style={[
-                styles.input,
-                !rightIcon && !isPasswordInput && {width: '100%'},
-                !editable && {color: colors.placeholder},
-                !editable && styles.inputNotEditAble,
-                {
-                  color: !!value ? colors.black : colors.placeholder,
-                },
-              ]}>
-              {!!value ? value : placeholder}
-            </Text>
+            <View style={{flexDirection: 'row', alignItems: 'center'}}>
+              <Text
+                style={[
+                  styles.input,
+                  inputStyle,
+                  !rightIcon && !isPasswordInput && {width: '100%'},
+                  !editable && {color: colors.placeholder},
+                  !editable && styles.inputNotEditAble,
+                  {
+                    color: !!value ? colors.black : colors.placeholder,
+                  },
+                ]}>
+                {!!value ? value : placeholder}
+              </Text>
+              {renderRightIcon()}
+            </View>
           )}
         </View>
         {!!inputError && <Text style={styles.errorText}>{error}</Text>}

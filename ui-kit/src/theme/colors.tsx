@@ -18,6 +18,6 @@ export const colors = {
   black: '#000000', // Information state color
   placeholder: '#686868', // Information state color
   transparent: 'transparent',
-  inactiveTabColor: '#F1F1F1',
+  inactiveTabColor: '#D1D1D1',
   activeBorder: '#1789C9',
 };
