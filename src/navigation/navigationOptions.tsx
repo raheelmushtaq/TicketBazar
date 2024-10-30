@@ -9,7 +9,7 @@ export const rootNavigationOptions = {
 };
 
 export const tabBarScreenOptions = {
-  headerShown: false,
+  headerShown: true,
   backgroundColor: '#ffffff',
   tabBarInactiveTintColor: colors.inactiveTabColor,
   tabBarActiveTintColor: colors.white,

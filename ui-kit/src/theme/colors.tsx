@@ -20,4 +20,5 @@ export const colors = {
   transparent: 'transparent',
   inactiveTabColor: '#D1D1D1',
   activeBorder: '#1789C9',
+  blackOverlay: 'rgba(0, 0, 0, 0.7)',
 };

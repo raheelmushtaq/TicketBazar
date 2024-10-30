@@ -5,4 +5,6 @@ export const images = {
   search: require('./images/search.png'),
   iconArrowDown: require('./images/iconArrowDown.png'),
   iconEye: require('./images/iconEye.png'),
+  next: require('./images/next.png'),
+  user: require('./images/user.png'),
 };

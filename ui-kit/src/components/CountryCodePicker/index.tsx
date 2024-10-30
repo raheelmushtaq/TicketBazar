@@ -10,6 +10,7 @@ import {colors} from '../../theme/colors';
 import {images} from '../../assets/images';
 import {dimensions} from '../../theme/dimensions';
 import InputField from '../InputField';
+import TouchableComponent from '../Touchable';
 
 type CountrCodePickerProps = {
   codeStyle?: ViewStyle;
@@ -70,7 +71,7 @@ const CountryCodePicker = ({
             }}>
             {'Country'}
           </Text>
-          <Pressable onPress={onClose}>
+          <TouchableComponent onPress={onClose}>
             <Image
               source={images.cross}
               style={{
@@ -79,7 +80,7 @@ const CountryCodePicker = ({
                 resizeMode: 'contain',
               }}
             />
-          </Pressable>
+          </TouchableComponent>
         </View>
       </>
     );
@@ -170,11 +171,11 @@ const CountryCodePicker = ({
   };
   return (
     <View style={[codeStyle]}>
-      <Pressable
+      <TouchableComponent
         onPress={() => {
           setIsCountryCodeVisible(true);
         }}
-        style={[styles.row, styles.inputBorder]}>
+        containerStyle={[styles.row, styles.inputBorder]}>
         <InputField
           onChangeText={() => {}}
           onPress={() => {
@@ -186,7 +187,7 @@ const CountryCodePicker = ({
           rightIcon={images.iconArrowDown}
           numberOfLines={1}
         />
-      </Pressable>
+      </TouchableComponent>
       {renderCountryCodePicker()}
     </View>
   );

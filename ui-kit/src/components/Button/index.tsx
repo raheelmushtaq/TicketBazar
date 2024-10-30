@@ -1,6 +1,7 @@
 import React, {useMemo} from 'react';
 import {Text, TextStyle, TouchableOpacity, View, ViewStyle} from 'react-native';
 import styles from './styles';
+import TouchableComponent from '../Touchable';
 
 type ButtonProps = {
   containerStyle?: ViewStyle;
@@ -57,17 +58,16 @@ const Button = ({
     : style[type].textStyle;
 
   return (
-    <TouchableOpacity
-      activeOpacity={0.8}
-      style={containerStyle}
-      disabled={isDisabled}
+    <TouchableComponent
+      containerStyle={containerStyle}
+      isDisabled={isDisabled}
       onPress={onPress}>
       <View style={[styles.button, bStyle, buttonStyle && buttonStyle]}>
         <Text style={[styles.defaultText, tStyle, textStyle && textStyle]}>
           {title}
         </Text>
       </View>
-    </TouchableOpacity>
+    </TouchableComponent>
   );
 };
 

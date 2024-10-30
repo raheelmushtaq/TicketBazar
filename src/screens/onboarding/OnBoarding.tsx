@@ -11,6 +11,7 @@ import AppStrings from '../../constants/constants.strings';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import LoginBottomSheet from '../../components/LoginBottomSheet';
 import {Button, Separator} from '../../../ui-kit';
+import useUserStore from '../../store/useUserStore';
 type CrouselData = {
   id: number;
   source: string;
@@ -20,6 +21,7 @@ type CrouselData = {
 
 const OnBoardingScreen = () => {
   const {updateOnBoarding} = useGeneralStore();
+  const {updateUserLoginStatus} = useUserStore();
   const [isLoginDialogVisible, sertIsLoginDialogVisible] = useState(false);
 
   const onCompleteAndSkip = () => {
@@ -53,12 +55,11 @@ const OnBoardingScreen = () => {
   const onNextButtonPressed = () => {
     if (currentIndex < onboardingData.length - 1) {
       flatListRef.current?.scrollToIndex({index: currentIndex + 1});
-    } else {
-      onCompleteAndSkip();
     }
   };
 
   const onSkipButtonPressed = () => {
+    updateUserLoginStatus(true, 'guest');
     onCompleteAndSkip();
   };
 
@@ -95,7 +96,7 @@ const OnBoardingScreen = () => {
         <Button
           type="secondary"
           title={AppStrings.loginAsGuest}
-          onPress={onCompleteAndSkip}
+          onPress={onSkipButtonPressed}
         />
       </View>
     );
@@ -108,7 +109,9 @@ const OnBoardingScreen = () => {
             sertIsLoginDialogVisible(false);
           }}
           isVisible={isLoginDialogVisible}
-          onLogin={() => {}}
+          onLogin={() => {
+            onCompleteAndSkip();
+          }}
         />
       );
     }

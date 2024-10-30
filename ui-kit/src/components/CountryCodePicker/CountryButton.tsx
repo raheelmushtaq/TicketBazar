@@ -1,6 +1,7 @@
 import {StyleSheet, Text, TouchableOpacity, ViewStyle} from 'react-native';
 import {colors} from '../../theme/colors';
 import {CountryCodeType} from './contants';
+import TouchableComponent from '../Touchable';
 
 type CountryButtonProps = {
   item: CountryCodeType;
@@ -13,7 +14,7 @@ export const CountryButton = ({
   style,
   onPress = () => {},
 }: CountryButtonProps) => (
-  <TouchableOpacity onPress={onPress} style={[styles.countryButton]}>
+  <TouchableComponent onPress={onPress} containerStyle={[styles.countryButton]}>
     <Text
       style={[
         {
@@ -40,7 +41,7 @@ export const CountryButton = ({
       ]}>
       {item?.name?.en}
     </Text>
-  </TouchableOpacity>
+  </TouchableComponent>
 );
 
 const styles = StyleSheet.create({

@@ -1,15 +1,36 @@
 import {Dimensions} from 'react-native';
 
 export const dimensions = {
-  paddingSmall: 8,
-  paddingMedium: 16,
-  paddingLarge: 24,
-  marginSmall: 8,
-  marginMedium: 16,
-  marginLarge: 24,
-  borderRadiusSmall: 4,
-  borderRadiusMedium: 8,
-  borderRadiusLarge: 16,
+  screenPadding: 8,
+
+  padding: {
+    smallest: 4,
+    small: 8,
+    medium: 16,
+    large: 24,
+    xLarge: 32,
+  },
+  margin: {
+    smallest: 4,
+    small: 8,
+    medium: 16,
+    large: 24,
+    xLarge: 32,
+  },
+  border: {
+    small: 4,
+    medium: 8,
+    large: 16,
+    xLarge: 24,
+  },
+
   SCREEN_HEIGHT: Dimensions.get('window').height,
   SCREEN_WIDTH: Dimensions.get('window').width,
+  icon: {
+    smallest: 8,
+    small: 16,
+    medium: 24,
+    large: 32,
+    XLarge: 48,
+  },
 };

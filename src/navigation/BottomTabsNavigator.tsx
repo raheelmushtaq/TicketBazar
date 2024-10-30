@@ -3,8 +3,12 @@ import React from 'react';
 import {Image, ImageProps, Text} from 'react-native';
 import {ScreenName} from '../constants/constants.screens';
 import {images} from '../assets/images';
-import HomeStackNavigator from './bottom_tabs/HomeStackNavigator';
 import {colors} from '../../ui-kit';
+import SearchScreen from '../screens/search';
+import BookingScreen from '../screens/booking';
+import SupportScreen from '../screens/support';
+import MenuScreen from '../screens/menu';
+import {tabBarScreenOptions} from './navigationOptions';
 
 const Tab = createBottomTabNavigator();
 type BottomTabTextProps = {
@@ -35,11 +39,11 @@ const BottomTabsNavigator = () => {
     return (
       <Image
         source={activeIcon}
+        tintColor={focused ? colors.black : colors.inactiveTabColor}
         style={{
           width: 25,
           height: 25,
           resizeMode: 'contain',
-          tintColor: focused ? colors.black : colors.inactiveTabColor,
         }}
       />
     );
@@ -47,50 +51,44 @@ const BottomTabsNavigator = () => {
 
   return (
     <>
-      <Tab.Navigator initialRouteName={ScreenName.HomeStack}>
+      <Tab.Navigator
+        screenOptions={tabBarScreenOptions}
+        initialRouteName={ScreenName.SearchScreen}>
         <Tab.Screen
-          name={ScreenName.HomeStack}
-          component={HomeStackNavigator}
+          name={ScreenName.SearchScreen}
+          component={SearchScreen}
           options={{
             tabBarLabel: ({focused}) => renderTabBarLabel(focused, 'Search'),
             tabBarIcon: ({focused}) =>
-              renderTabBarIcon(
-                focused,
-                images.bottomSearch,
-                images.bottomSearch,
-              ),
+              renderTabBarIcon(focused, images.nav_search, images.nav_search),
           }}
         />
 
         <Tab.Screen
           name={ScreenName.BookingStack}
-          component={HomeStackNavigator}
+          component={BookingScreen}
           options={{
             tabBarLabel: ({focused}) => renderTabBarLabel(focused, 'Booking'),
             tabBarIcon: ({focused}) =>
-              renderTabBarIcon(
-                focused,
-                images.bottomSearch,
-                images.bottomSearch,
-              ),
+              renderTabBarIcon(focused, images.nav_booking, images.nav_booking),
           }}
         />
-        <Tab.Screen
-          name={ScreenName.OtherStack}
-          component={HomeStackNavigator}
+        {/* <Tab.Screen
+          name={ScreenName.SupportStack}
+          component={ d}
           options={{
-            tabBarLabel: ({focused}) => renderTabBarLabel(focused, 'Other'),
+            tabBarLabel: ({focused}) => renderTabBarLabel(focused, 'Support'),
             tabBarIcon: ({focused}) =>
-              renderTabBarIcon(focused, images.bottomOther, images.bottomOther),
+              renderTabBarIcon(focused, images.nav_support, images.nav_support),
           }}
-        />
+        /> */}
         <Tab.Screen
-          name={ScreenName.SettingStack}
-          component={HomeStackNavigator}
+          name={ScreenName.MenuScreen}
+          component={MenuScreen}
           options={{
-            tabBarLabel: ({focused}) => renderTabBarLabel(focused, 'Settings'),
+            tabBarLabel: ({focused}) => renderTabBarLabel(focused, 'Menu'),
             tabBarIcon: ({focused}) =>
-              renderTabBarIcon(focused, images.bottomOther, images.bottomOther),
+              renderTabBarIcon(focused, images.nav_menu, images.nav_menu),
           }}
         />
       </Tab.Navigator>

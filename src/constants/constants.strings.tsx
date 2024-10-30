@@ -12,5 +12,6 @@ const AppStrings = {
   signInOrCreateAccount: 'Sign in or Create Account',
   phoneNumber: 'Phone Number',
   continue: 'Continue',
+  VerifyOtp: 'Verify Otp',
 };
 export default AppStrings;

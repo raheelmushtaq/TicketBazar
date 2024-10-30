@@ -4,6 +4,7 @@ import Modal from 'react-native-modal';
 import {colors} from '../../theme/colors';
 import {dimensions} from '../../theme/dimensions';
 import {images} from '../../assets/images';
+import TouchableComponent from '../Touchable';
 
 type BottomSheetDialogProps = {
   isVisible: boolean;
@@ -23,66 +24,87 @@ const BottomSheetDialog = ({
   showCrossIcon,
   children,
 }: BottomSheetDialogProps) => {
-  const renderModalContent = () => (
-    <>
-      <View style={[styles.modalContent, {backgroundColor: colors.white}]}>
-        <View style={{flexDirection: 'row', flex: 1, marginVertical: 20}}>
+  const renderTopRow = () => {
+    return (
+      <View
+        style={{
+          flexDirection: 'row',
+          alignItems: 'center', // Center items vertically
+          width: '90%',
+          alignSelf: 'center',
+          marginHorizontal: 10,
+          marginVertical: 10,
+          justifyContent: 'space-between', // Add space between elements
+        }}>
+        <View style={{flex: 1, alignItems: 'center'}}>
           {showTopBar && (
             <View
               style={{
                 width: 50,
                 height: 10,
-                borderRadius: dimensions.borderRadiusLarge,
-                alignSelf: 'center',
+                borderRadius: dimensions.border.large,
                 backgroundColor: colors.black,
-              }}></View>
-          )}
-          {showCrossIcon && (
-            <Pressable
-              onPress={closeModal}
-              style={{
-                width: 50,
-                height: 50,
-                borderRadius: dimensions.borderRadiusLarge,
-                alignSelf: 'flex-end',
-                backgroundColor: colors.black,
-                marginVertical: 20,
-              }}>
-              <Image
-                source={images.cross}
-                style={{height: 30, width: 30}}
-                tintColor={colors.black}
-              />
-            </Pressable>
+              }}
+            />
           )}
         </View>
-        {!!header && (
-          <Text
-            numberOfLines={2}
-            style={{
-              fontSize: 14,
-              color: colors.textOnPrimary,
-              paddingHorizontal: dimensions.paddingLarge,
-            }}
-          />
+        {showCrossIcon && (
+          <TouchableComponent
+            onPress={closeModal}
+            containerStyle={{
+              width: 30,
+              height: 30,
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: dimensions.border.large,
+            }}>
+            <Image
+              source={images.cross}
+              style={{height: 15, width: 15}}
+              tintColor={colors.black}
+            />
+          </TouchableComponent>
         )}
+      </View>
+    );
+  };
 
+  const renderHeader = () => {
+    if (!!header) {
+      return (
+        <Text
+          numberOfLines={2}
+          style={{
+            fontSize: 14,
+            color: colors.textOnPrimary,
+            paddingHorizontal: dimensions.padding.large,
+          }}
+        />
+      );
+    }
+    return null;
+  };
+  const renderModalContent = () => (
+    <View style={{backgroundColor: 'green'}}>
+      <View style={styles.modalContent}>
+        {renderTopRow()}
+        {renderHeader()}
         <View
           style={{
-            paddingHorizontal: dimensions.paddingLarge,
-            paddingVertical: dimensions.paddingSmall,
+            paddingHorizontal: dimensions.padding.large,
+            paddingVertical: dimensions.padding.small,
           }}>
           {children}
         </View>
       </View>
-    </>
+    </View>
   );
 
   const renderPropertyDialogContent = () => {
     return (
       <Modal
         isVisible={isVisible}
-        backdropColor={colors.background}
+        backdropColor={colors.blackOverlay}
         deviceWidth={dimensions.SCREEN_WIDTH}
         deviceHeight={dimensions.SCREEN_HEIGHT}
         onBackdropPress={onBackDropPress}
@@ -108,8 +130,8 @@ const styles = StyleSheet.create({
 
   modalContent: {
     backgroundColor: colors.white,
-    borderTopRightRadius: dimensions.borderRadiusMedium,
-    borderTopLeftRadius: dimensions.borderRadiusMedium,
+    borderTopRightRadius: dimensions.border.medium,
+    borderTopLeftRadius: dimensions.border.medium,
   },
 
   bottomModal: {

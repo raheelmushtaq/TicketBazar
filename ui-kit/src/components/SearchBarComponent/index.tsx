@@ -13,6 +13,7 @@ import {
 import {images} from '../../assets/images';
 import {CustomerLoader} from '../Loader/CustomLoader';
 import {colors} from '../../theme/colors';
+import TouchableComponent from '../Touchable';
 
 interface SearchBarProps extends TextInputProps {
   onChangeText: (text: string) => void;
@@ -47,11 +48,11 @@ const SearchBar: React.FC<SearchBarProps> = ({
   const renderCrossIcon = () => {
     if (!!value || showClearButton) {
       return (
-        <Pressable
+        <TouchableComponent
           onPress={onClearText}
           style={[styles.crossIconContainer, clearViewStyles]}>
           <Image source={images.cross} style={styles.crossIconStyle} />
-        </Pressable>
+        </TouchableComponent>
       );
     }
     return null;

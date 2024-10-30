@@ -1,9 +1,10 @@
 import {Platform} from 'react-native';
-import {colors} from '../../ui-kit';
+import {colors, typography} from '../../ui-kit';
 
 export const tabBarStyles = {
-  backgroundColor: '#1789C9',
+  backgroundColor: colors.secondary,
   paddingTop: 15,
+  paddingBottom: 15,
   paddingHorizontal: 20,
   height: Platform.OS === 'ios' ? 70 : 55,
   ...Platform.select({
@@ -25,5 +26,5 @@ export const tabBarStyles = {
 };
 
 export const tabBarLabelStyle = {
-  fontSize: 11,
+  fontSize: typography.fontSizes.lg,
 };

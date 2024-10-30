@@ -9,6 +9,7 @@ import {
 import {useEffect, useState} from 'react';
 import {images} from '../../assets/images';
 import {colors} from '../../theme/colors';
+import TouchableComponent from '../Touchable';
 
 type CheckBoxProps = {
   checked: boolean;
@@ -37,10 +38,12 @@ const CheckBox = ({
     onValueChange?.(!isChecked);
   };
   return (
-    <TouchableOpacity
+    <TouchableComponent
       onPress={onChange}
-      activeOpacity={0.8}
-      style={[{flexDirection: 'row', alignItems: 'center'}, containerStyle]}>
+      containerStyle={[
+        {flexDirection: 'row', alignItems: 'center'},
+        containerStyle,
+      ]}>
       <Image
         source={isChecked ? images.checkBoxChecked : images.checkBoxUnChecked}
         style={[{width: 24, height: 24, resizeMode: 'contain'}, checkBoxStyle]}
@@ -57,7 +60,7 @@ const CheckBox = ({
         ]}>
         {text}
       </Text>
-    </TouchableOpacity>
+    </TouchableComponent>
   );
 };
 export default CheckBox;

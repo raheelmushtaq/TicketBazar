@@ -1,6 +1,6 @@
 import {useEffect, useState} from 'react';
 import {SafeAreaView} from 'react-native-safe-area-context';
-import SplashScreen from './src/screens/feat_splash/SplashScreen';
+import SplashScreen from './src/screens/splash/SplashScreen';
 import RootContainer from './src/navigation/RootContainer';
 import RootNavigator from './src/navigation/RootNavigator';
 

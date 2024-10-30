@@ -22,6 +22,7 @@ import {
 import styles from './styles';
 import {colors} from '../../theme/colors';
 import {images} from '../../assets/images';
+import TouchableComponent from '../Touchable';
 
 interface InputFieldHandles {
   focus: () => void;
@@ -160,7 +161,6 @@ const InputField = forwardRef<InputFieldHandles, InputFieldProps>(
     );
 
     const renderRightIcon = () => {
-      console.warn(`${rightIcon} ${isPasswordInput}`);
       if (isPasswordInput) {
         return RightIconCompoenent(
           images.iconEye,
@@ -176,21 +176,29 @@ const InputField = forwardRef<InputFieldHandles, InputFieldProps>(
       icon: ImageProps,
       tint: string,
       onPress?: () => void | undefined,
-    ) => (
-      <TouchableOpacity
-        accessible={true}
-        accessibilityRole={'button'}
-        accessibilityLabel={
-          securePasswordTextEntry ? 'Show password' : 'Hide password'
-        }
-        style={styles.inputRightViewContainer}
-        onPress={onPress}>
-        <Image
-          source={icon}
-          style={[styles.inputRightImage, {tintColor: tint}]}
-        />
-      </TouchableOpacity>
-    );
+    ) => {
+      if (!!onPress) {
+        return (
+          <TouchableComponent
+            containerStyle={styles.inputRightViewContainer}
+            onPress={onPress}>
+            <Image
+              source={icon}
+              style={[styles.inputRightImage, {tintColor: tint}]}
+            />
+          </TouchableComponent>
+        );
+      } else {
+        return (
+          <View style={styles.inputRightViewContainer}>
+            <Image
+              source={icon}
+              style={[styles.inputRightImage, {tintColor: tint}]}
+            />
+          </View>
+        );
+      }
+    };
 
     const renderInputField = () => (
       <View>
