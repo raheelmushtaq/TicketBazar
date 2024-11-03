@@ -18,7 +18,7 @@ export const colors = {
   black: '#000000', // Information state color
   placeholder: '#686868', // Information state color
   transparent: 'transparent',
-  inactiveTabColor: '#D1D1D1',
+  inactiveTabColor: '#a3a3a3',
   activeBorder: '#1789C9',
   blackOverlay: 'rgba(0, 0, 0, 0.7)',
 };

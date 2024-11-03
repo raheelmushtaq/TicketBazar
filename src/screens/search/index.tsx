@@ -1,5 +1,12 @@
 import React, {useEffect, useLayoutEffect, useState} from 'react';
-import {ActivityIndicator, Image, Keyboard, Text, View} from 'react-native';
+import {
+  ActivityIndicator,
+  Image,
+  Keyboard,
+  ScrollView,
+  Text,
+  View,
+} from 'react-native';
 import {styles} from './styles';
 import {images} from '../../assets/images';
 import {StackNavigationProp} from '@react-navigation/stack';
@@ -16,6 +23,7 @@ import InputField from '../../../ui-kit/src/components/InputField';
 import CardView from '../../../ui-kit/src/components/CardView';
 import TabItem from '../../../ui-kit/src/components/TabItem';
 import ImageButton from '../../../ui-kit/src/components/ImageButton';
+import useController from './controller';
 
 type SearchScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -26,29 +34,19 @@ type SearchScreenProps = {
   navigation: SearchScreenNavigationProp;
 };
 
-type TabType = 'flight' | 'bus' | 'visa';
-type FlightType = 'one' | 'two' | 'any';
-
 const SearchScreen: React.FC<SearchScreenProps> = ({navigation}) => {
-  const [email, setEmail] = useState('');
-  const [orderId, setOrderId] = useState('');
-
-  const [emailError, setEmailError] = useState('');
-  const [orderIdError, setOrderIdError] = useState('');
-
-  const [selectedTab, setSelectedTab] = useState<TabType>('flight');
-
-  const [selectedFlightType, setSelectedFlightType] =
-    useState<FlightType>('one');
-  const handleEmaiChange = (text: string) => {
-    if (emailError) setEmailError('');
-    setEmail(text);
-  };
-  const handleOrderIdChange = (text: string) => {
-    if (orderIdError) setOrderIdError('');
-    setOrderId(text);
-  };
-
+  const {
+    email,
+    emailError,
+    orderIdError,
+    handleEmaiChange,
+    orderId,
+    handleOrderIdChange,
+    setSelectedTab,
+    selectedFlightType,
+    selectedTab,
+    setSelectedFlightType,
+  } = useController();
   const renderTabView = () => {
     return (
       <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
@@ -80,46 +78,179 @@ const SearchScreen: React.FC<SearchScreenProps> = ({navigation}) => {
     );
   };
 
-  const renderFLightView = () => {
+  const renderFlightView = () => {
     if (selectedTab === 'flight')
       return (
-        <View
-          style={{
-            flexDirection: 'row',
-            flexWrap: 'wrap',
-            marginTop: dimensions.margin.medium,
-          }}>
-          <Button
-            type={selectedFlightType === 'one' ? 'primary' : 'secondary'}
-            title="One Way"
-            onPress={() => {
-              setSelectedFlightType('one');
-            }}
+        <View style={{marginVertical: dimensions.margin.medium}}>
+          <View
+            style={{
+              flexDirection: 'row',
+              flexWrap: 'wrap',
+            }}>
+            <Button
+              type={selectedFlightType === 'one' ? 'primary' : 'secondary'}
+              title="One Way"
+              buttonStyle={{paddingVertical: dimensions.padding.small}}
+              onPress={() => {
+                setSelectedFlightType('one');
+              }}
+            />
+            <Separator
+              showTransparent
+              showVertical={false}
+              width={dimensions.margin.small}
+            />
+            <Button
+              type={selectedFlightType === 'two' ? 'primary' : 'secondary'}
+              title="Return"
+              buttonStyle={{paddingVertical: dimensions.padding.small}}
+              onPress={() => {
+                setSelectedFlightType('two');
+              }}
+            />
+
+            <Separator
+              showTransparent
+              showVertical={false}
+              width={dimensions.margin.small}
+            />
+            <Button
+              type={selectedFlightType === 'any' ? 'primary' : 'secondary'}
+              title="Multi City"
+              buttonStyle={{paddingVertical: dimensions.padding.small}}
+              onPress={() => {
+                setSelectedFlightType('any');
+              }}
+            />
+          </View>
+          <InputField
+            error={orderIdError}
+            value={orderId}
+            label="From"
+            placeholder="Flying From (City or Airport)"
+            editable={false}
+            blurOnSubmit={false}
+            onPress={() => {}}
+            onChangeText={handleOrderIdChange}
           />
-          <Separator
-            showTransparent
-            showVertical={false}
-            width={dimensions.margin.small}
-          />
-          <Button
-            type={selectedFlightType === 'two' ? 'primary' : 'secondary'}
-            title="Return"
-            onPress={() => {
-              setSelectedFlightType('two');
-            }}
+          <InputField
+            error={emailError}
+            label="To"
+            placeholder="Flying To (City or Airport)"
+            value={email}
+            editable={false}
+            blurOnSubmit={false}
+            onChangeText={handleEmaiChange}
+            onSubmitEditing={Keyboard.dismiss}
           />
 
-          <Separator
-            showTransparent
-            showVertical={false}
-            width={dimensions.margin.small}
+          <InputField
+            error={emailError}
+            editable={false}
+            label="Departing"
+            placeholder="Date to Depart"
+            value={email}
+            blurOnSubmit={false}
+            onChangeText={handleEmaiChange}
+            onSubmitEditing={Keyboard.dismiss}
           />
-          <Button
-            type={selectedFlightType === 'any' ? 'primary' : 'secondary'}
-            title="Multi City"
-            onPress={() => {
-              setSelectedFlightType('any');
-            }}
+          {selectedFlightType === 'two' && (
+            <InputField
+              error={emailError}
+              label="Returning"
+              placeholder="Date to Return"
+              value={email}
+              editable={false}
+              blurOnSubmit={false}
+              onChangeText={handleEmaiChange}
+              onSubmitEditing={Keyboard.dismiss}
+            />
+          )}
+          <InputField
+            error={emailError}
+            label="Travlers"
+            placeholder="No of People Travelling"
+            value={email}
+            editable={false}
+            blurOnSubmit={false}
+            onChangeText={handleEmaiChange}
+            onSubmitEditing={Keyboard.dismiss}
+          />
+          <InputField
+            error={emailError}
+            label="Class"
+            placeholder="Class for Flight"
+            value={email}
+            blurOnSubmit={false}
+            editable={false}
+            onChangeText={handleEmaiChange}
+            onSubmitEditing={Keyboard.dismiss}
+          />
+        </View>
+      );
+    return null;
+  };
+  const renderBusView = () => {
+    if (selectedTab === 'bus')
+      return (
+        <View style={{marginVertical: dimensions.margin.medium}}>
+          <InputField
+            error={orderIdError}
+            value={orderId}
+            label="From"
+            placeholder="Leaving From (City)"
+            editable={false}
+            blurOnSubmit={false}
+            onPress={() => {}}
+            onChangeText={handleOrderIdChange}
+          />
+          <InputField
+            error={emailError}
+            label="To"
+            placeholder="Leaving To (City)"
+            value={email}
+            editable={false}
+            blurOnSubmit={false}
+            onChangeText={handleEmaiChange}
+            onSubmitEditing={Keyboard.dismiss}
+          />
+
+          <InputField
+            error={emailError}
+            label="Date"
+            placeholder="Date"
+            value={email}
+            blurOnSubmit={false}
+            onChangeText={handleEmaiChange}
+            onSubmitEditing={Keyboard.dismiss}
+          />
+        </View>
+      );
+    return null;
+  };
+  const renderVisaView = () => {
+    if (selectedTab === 'visa')
+      return (
+        <View style={{marginVertical: dimensions.margin.medium}}>
+          <InputField
+            error={orderIdError}
+            value={'Pakistani'}
+            label="Nationaliy"
+            placeholder="Pakistani"
+            editable={false}
+            blurOnSubmit={false}
+            onPress={() => {}}
+            onChangeText={handleOrderIdChange}
+          />
+          <InputField
+            error={emailError}
+            label="Visa"
+            placeholder="Visa for?"
+            value={email}
+            editable={false}
+            blurOnSubmit={false}
+            onChangeText={handleEmaiChange}
+            onSubmitEditing={Keyboard.dismiss}
           />
         </View>
       );
@@ -139,56 +270,28 @@ const SearchScreen: React.FC<SearchScreenProps> = ({navigation}) => {
           backgroundColor: colors.black,
         }}
       />
-      <CardView containerStyle={{marginTop: dimensions.margin.xLarge}}>
-        <View style={{flex: 1}}>
-          <Text
-            style={{
-              fontSize: typography.fontSizes.lg,
-              color: colors.textPrimary,
-              marginBottom: dimensions.margin.large,
-            }}>
-            Travel Booking Made Easy
-          </Text>
-          {renderTabView()}
-          {renderFLightView()}
-          <InputField
-            error={orderIdError}
-            value={orderId}
-            label="Order Id"
-            placeholder="Order Id"
-            blurOnSubmit={false}
-            onChangeText={handleOrderIdChange}
-            onSubmitEditing={Keyboard.dismiss}
-          />
+      <ScrollView
+        showsVerticalScrollIndicator={false}
+        keyboardDismissMode={'on-drag'}>
+        <CardView containerStyle={{marginTop: dimensions.margin.xLarge}}>
+          <View style={{flex: 1}}>
+            <Text
+              style={{
+                fontSize: typography.fontSizes.lg,
+                color: colors.textPrimary,
+                marginBottom: dimensions.margin.large,
+              }}>
+              Travel Booking Made Easy
+            </Text>
+            {renderTabView()}
+            {renderFlightView()}
+            {renderBusView()}
+            {renderVisaView()}
 
-          <Text
-            style={{
-              fontSize: typography.fontSizes.sm,
-              marginBottom: dimensions.margin.medium,
-            }}>
-            Your Order Id is emailed with the booking confirmation.
-          </Text>
-
-          <InputField
-            error={emailError}
-            label="Email"
-            placeholder="Email"
-            value={email}
-            blurOnSubmit={false}
-            onChangeText={handleEmaiChange}
-            onSubmitEditing={Keyboard.dismiss}
-          />
-
-          <Text
-            style={{
-              fontSize: typography.fontSizes.sm,
-              marginBottom: dimensions.margin.xLarge,
-            }}>
-            The email address entered during booking.
-          </Text>
-          <Button title="Search" onPress={() => {}} type={'primary'} />
-        </View>
-      </CardView>
+            <Button title="Search" onPress={() => {}} type={'primary'} />
+          </View>
+        </CardView>
+      </ScrollView>
     </AppBackground>
   );
 };
