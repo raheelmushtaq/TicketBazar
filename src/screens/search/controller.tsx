@@ -6,73 +6,250 @@ type FlightDataItem = {
   from: string;
   fromError?: string;
   to: string;
-  toError?: String;
+  toError?: string;
   departDate: Date;
   departDateError?: string;
   returnDate?: Date;
   returnDateError?: string;
 };
-type FightsData = {
-  flights: FlightDataItem[];
-  adult: number | 0;
-  child: number | 0;
-  infants: number | 0;
-  class: string;
-  classError: string;
+type BusDataItem = {
+  from: string;
+  fromError?: string;
+  to: string;
+  toError?: string;
+  departDate: Date;
+  departDateError?: string;
+};
+type VisaDataItem = {
+  visa: string;
+  visaError?: string;
+};
+type TravelsData = {
+  adult: number;
+  children: number;
+  infants: number;
+  error?: string;
+  travelClass: string;
+  classError?: string;
 };
 const useController = () => {
-  const [email, setEmail] = useState('');
-  const [orderId, setOrderId] = useState('');
+  const [busData, setbusData] = useState<BusDataItem>({
+    from: '',
+    to: '',
+    departDate: new Date(),
+  });
+  const [visaData, setVisaData] = useState<VisaDataItem>({
+    visa: '',
+  });
 
-  const [emailError, setEmailError] = useState('');
-  const [orderIdError, setOrderIdError] = useState('');
+  const [travelData, setTravelData] = useState<TravelsData>({
+    adult: 0,
+    children: 0,
+    infants: 0,
+    travelClass: '',
+  });
 
   const [selectedTab, setSelectedTab] = useState<TabType>('flight');
-  const [flightData, setFlightData] = useState<FlightDataItem>();
+
+  const [flightData, setFlightData] = useState<FlightDataItem>({
+    from: '',
+    to: '',
+    departDate: new Date(),
+  });
+
+  const [mutiFlightData, setMultiFlightData] = useState<FlightDataItem[]>([
+    {
+      from: '',
+      to: '',
+      departDate: new Date(),
+    },
+    {
+      from: '',
+      to: '',
+      departDate: new Date(),
+    },
+  ]);
 
   const [selectedFlightType, setSelectedFlightType] =
     useState<FlightType>('one');
-  const handleEmaiChange = (text: string) => {
-    if (emailError) setEmailError('');
-    setEmail(text);
+
+  const addMultiFlightData = () => {
+    var array = [...mutiFlightData];
+    array.push({from: '', to: '', departDate: new Date()});
+
+    setMultiFlightData([...array]);
   };
-  const handleOrderIdChange = (text: string) => {
-    if (orderIdError) setOrderIdError('');
-    setOrderId(text);
-  };
-  const handleOneTwoWayDatChane = (
-    from?: string,
-    to?: string,
-    departDate?: string,
-    returnDate?: string,
-  ) => {
-    const dFrom = from ? from : flightData?.from || '';
-    const dTo = to ? to : flightData?.to || '';
-    const dDepart = departDate ? departDate : flightData?.departDate || '';
-    const dReturn = returnDate ? returnDate : flightData?.returnDate;
+
+  const removeDestination = (position: number) => {
+    var array: FlightDataItem[] = [];
+    mutiFlightData.forEach((element, index) => {
+      if (index != position) {
+        array.push(element);
+      }
+    });
+
+    setMultiFlightData([...array]);
   };
   const handleFlightFromChange = (from: string) => {
     let error = flightData?.fromError;
     if (from) {
       error = '';
     }
-    // setFlightData({...flightData, fromError: error, from: from});
+    setFlightData({...flightData, fromError: error, from: from});
   };
-  const handleFlightToChange = (to: string) => {};
-  const handleFlightDepartDateChange = (departDate: string) => {};
-  const handleFlightReturnDateChange = (returnDate: string) => {};
+  const handleFlightToChange = (to: string) => {
+    let error = flightData?.toError;
+    if (to) {
+      error = '';
+    }
+    setFlightData({...flightData, toError: error, to: to});
+  };
+  const handleFlightDepartDateChange = (departDate: Date) => {
+    let error = flightData?.departDateError;
+    if (departDate) {
+      error = '';
+    }
+    setFlightData({
+      ...flightData,
+      departDateError: error,
+      departDate: departDate,
+    });
+  };
+  const handleFlightReturnDateChange = (returnDate: Date) => {
+    let error = flightData?.returnDateError;
+    if (returnDate) {
+      error = '';
+    }
+    setFlightData({
+      ...flightData,
+      returnDateError: error,
+      returnDate: returnDate,
+    });
+  };
+  const handleTravelDataChange = (
+    adult: number,
+    children: number,
+    infants: number,
+  ) => {
+    console.log({adult, children, infants});
+    let error = travelData?.error;
+    if (error) {
+      error = '';
+    }
+    setTravelData({
+      ...travelData,
+      error: error,
+      adult: adult,
+      children: children,
+      infants: infants,
+    });
+  };
+  const handleTravelClassChange = (travelClass: string) => {
+    let error = travelData?.classError;
+    if (error) {
+      error = '';
+    }
+    setTravelData({
+      ...travelData,
+      classError: error,
+      travelClass: travelClass,
+    });
+  };
+  const handleVisaChange = (visa: string) => {
+    let error = visaData?.visaError;
+    if (error) {
+      error = '';
+    }
+    setVisaData({
+      ...visaData,
+      visa: visa,
+      visaError: error,
+    });
+  };
+
+  const handleBusFromChange = (from: string) => {
+    let error = busData?.fromError;
+    if (from) {
+      error = '';
+    }
+    setbusData({...busData, fromError: error, from: from});
+  };
+  const handleBusToChange = (to: string) => {
+    let error = busData?.toError;
+    if (to) {
+      error = '';
+    }
+    setbusData({...busData, toError: error, to: to});
+  };
+  const handleBusDepartDateChange = (departDate: Date) => {
+    let error = busData?.departDateError;
+    if (departDate) {
+      error = '';
+    }
+    setbusData({
+      ...busData,
+      departDateError: error,
+      departDate: departDate,
+    });
+  };
+  const handleMultiFlightFromChange = (from: string, index: number) => {
+    const array = [...mutiFlightData];
+    let error = array[index]?.fromError;
+    if (from) {
+      error = '';
+    }
+    array[index] = {...array[index], from: from, fromError: error};
+
+    setMultiFlightData([...array]);
+  };
+  const handleMultiFlightToChange = (to: string, index: number) => {
+    const array = [...mutiFlightData];
+    let error = array[index]?.fromError;
+    if (to) {
+      error = '';
+    }
+    array[index] = {...array[index], to: to, toError: error};
+
+    setMultiFlightData([...array]);
+  };
+  const handleMultiFlightsDepartDateChange = (
+    departDate: Date,
+    index: number,
+  ) => {
+    const array = [...mutiFlightData];
+    let error = array[index]?.departDateError;
+    if (departDate) {
+      error = '';
+    }
+    array[index] = {...array[index], departDate: departDate, fromError: error};
+
+    setMultiFlightData([...array]);
+  };
   return {
-    email,
-    emailError,
-    orderIdError,
-    handleEmaiChange,
-    orderId,
-    handleOrderIdChange,
+    travelData,
+    flightData,
+    visaData,
+    busData,
     setSelectedTab,
     selectedFlightType,
     selectedTab,
     setSelectedFlightType,
-    flightData,
+    mutiFlightData,
+    addMultiFlightData,
+    removeDestination,
+    handleFlightDepartDateChange,
+    handleFlightFromChange,
+    handleFlightReturnDateChange,
+    handleFlightToChange,
+    handleTravelClassChange,
+    handleTravelDataChange,
+    handleVisaChange,
+    handleBusDepartDateChange,
+    handleBusFromChange,
+    handleBusToChange,
+    handleMultiFlightFromChange,
+    handleMultiFlightToChange,
+    handleMultiFlightsDepartDateChange,
   };
 };
 

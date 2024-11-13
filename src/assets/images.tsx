@@ -27,4 +27,8 @@ export const images = {
   instagram: require('../assets/images/instagram.png'),
   user: require('../assets/images/user.png'),
   search_bg: require('../assets/images/search_bg.jpg'),
+  plus: require('../assets/images/plus.png'),
+  trash: require('../assets/images/trash.png'),
+  add: require('../assets/images/add.png'),
+  minus: require('../assets/images/minus.png'),
 };

@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
   },
   secondaryButton: {
     backgroundColor: colors.secondary,
-    borderColor: colors.border,
+    borderColor: colors.textOnSecondary,
   },
   secondaryText: {
     color: colors.textOnSecondary,

@@ -24,6 +24,13 @@ import CardView from '../../../ui-kit/src/components/CardView';
 import TabItem from '../../../ui-kit/src/components/TabItem';
 import ImageButton from '../../../ui-kit/src/components/ImageButton';
 import useController from './controller';
+import TouchableComponent from '../../../ui-kit/src/components/Touchable';
+import FlightInputField from '../../components/FlightInputField';
+import DateInputField from '../../components/DateInputField';
+import TravelInputField from '../../components/TravelInputField';
+import TravelClassInputField from '../../components/TravelClassInputField';
+import BusInputField from '../../components/BusInputField';
+import VisaInputField from '../../components/VisaInputField';
 
 type SearchScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -36,17 +43,32 @@ type SearchScreenProps = {
 
 const SearchScreen: React.FC<SearchScreenProps> = ({navigation}) => {
   const {
-    email,
-    emailError,
-    orderIdError,
-    handleEmaiChange,
-    orderId,
-    handleOrderIdChange,
+    flightData,
+    busData,
+    visaData,
+    travelData,
+    mutiFlightData,
     setSelectedTab,
     selectedFlightType,
     selectedTab,
     setSelectedFlightType,
+    addMultiFlightData,
+    removeDestination,
+    handleFlightDepartDateChange,
+    handleFlightFromChange,
+    handleFlightReturnDateChange,
+    handleFlightToChange,
+    handleTravelClassChange,
+    handleTravelDataChange,
+    handleVisaChange,
+    handleBusDepartDateChange,
+    handleBusFromChange,
+    handleBusToChange,
+    handleMultiFlightFromChange,
+    handleMultiFlightToChange,
+    handleMultiFlightsDepartDateChange,
   } = useController();
+
   const renderTabView = () => {
     return (
       <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
@@ -79,6 +101,125 @@ const SearchScreen: React.FC<SearchScreenProps> = ({navigation}) => {
   };
 
   const renderFlightView = () => {
+    const renderOne2FlightView = () => {
+      return (
+        <>
+          <FlightInputField
+            error={flightData.fromError}
+            label="From"
+            placeholder="Flying From (City or Airport)"
+            value={flightData.from}
+            onValueSelected={handleFlightFromChange}
+          />
+          <FlightInputField
+            error={flightData.toError}
+            label="To"
+            placeholder="Flying To (City or Airport)"
+            value={flightData.to}
+            onValueSelected={handleFlightToChange}
+          />
+
+          <DateInputField
+            error={flightData.departDateError}
+            label="Departing"
+            placeholder="Date to Depart"
+            value={flightData.departDate}
+            onValueSelected={handleFlightDepartDateChange}
+          />
+          {selectedFlightType === 'two' && (
+            <DateInputField
+              error={flightData.returnDateError}
+              label="Returning"
+              placeholder="Date to Return"
+              value={flightData.returnDate || new Date()}
+              onValueSelected={handleFlightReturnDateChange}
+            />
+          )}
+        </>
+      );
+    };
+    const renderMultiFlightView = () => {
+      return (
+        <>
+          {mutiFlightData.map((item, index) => {
+            return (
+              <>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    alignItems: 'center',
+                    marginTop: dimensions.margin.large,
+                  }}>
+                  <Text
+                    style={{
+                      fontSize: typography.fontSizes.md,
+                      color: colors.black,
+                      flex: 1,
+                    }}>
+                    Flight {index + 1}
+                  </Text>
+
+                  {index >= 2 && (
+                    <TouchableComponent
+                      containerStyle={{padding: dimensions.padding.small}}
+                      onPress={() => {
+                        removeDestination(index);
+                      }}>
+                      <Image
+                        style={{height: 16, width: 16, resizeMode: 'contain'}}
+                        source={images.trash}
+                      />
+                    </TouchableComponent>
+                  )}
+                </View>
+                <FlightInputField
+                  error={item.fromError}
+                  value={item.from}
+                  label="From"
+                  placeholder="Flying From (City or Airport)"
+                  onValueSelected={text =>
+                    handleMultiFlightFromChange(text, index)
+                  }
+                />
+                <FlightInputField
+                  error={item.toError}
+                  label="To"
+                  placeholder="Flying To (City or Airport)"
+                  value={item.to}
+                  onValueSelected={text =>
+                    handleMultiFlightToChange(text, index)
+                  }
+                />
+
+                <DateInputField
+                  error={item.departDateError}
+                  label="Departing"
+                  placeholder="Date to Depart"
+                  value={item.departDate}
+                  onValueSelected={date =>
+                    handleMultiFlightsDepartDateChange(date, index)
+                  }
+                />
+              </>
+            );
+          })}
+          {mutiFlightData.length <= 4 && (
+            <ImageButton
+              containerStyle={{
+                marginTop: dimensions.margin.medium,
+                width: '50%',
+              }}
+              iconLocation={'left'}
+              onPress={addMultiFlightData}
+              type={'primary'}
+              icon={images.plus}
+              title="Add Destintation"
+            />
+          )}
+          <Separator showTransparent={true} showVertical={true} height={20} />
+        </>
+      );
+    };
     if (selectedTab === 'flight')
       return (
         <View style={{marginVertical: dimensions.margin.medium}}>
@@ -123,68 +264,25 @@ const SearchScreen: React.FC<SearchScreenProps> = ({navigation}) => {
               }}
             />
           </View>
-          <InputField
-            error={orderIdError}
-            value={orderId}
-            label="From"
-            placeholder="Flying From (City or Airport)"
-            editable={false}
-            blurOnSubmit={false}
-            onPress={() => {}}
-            onChangeText={handleOrderIdChange}
-          />
-          <InputField
-            error={emailError}
-            label="To"
-            placeholder="Flying To (City or Airport)"
-            value={email}
-            editable={false}
-            blurOnSubmit={false}
-            onChangeText={handleEmaiChange}
-            onSubmitEditing={Keyboard.dismiss}
-          />
 
-          <InputField
-            error={emailError}
-            editable={false}
-            label="Departing"
-            placeholder="Date to Depart"
-            value={email}
-            blurOnSubmit={false}
-            onChangeText={handleEmaiChange}
-            onSubmitEditing={Keyboard.dismiss}
-          />
-          {selectedFlightType === 'two' && (
-            <InputField
-              error={emailError}
-              label="Returning"
-              placeholder="Date to Return"
-              value={email}
-              editable={false}
-              blurOnSubmit={false}
-              onChangeText={handleEmaiChange}
-              onSubmitEditing={Keyboard.dismiss}
-            />
-          )}
-          <InputField
-            error={emailError}
+          {selectedFlightType === 'any' && renderMultiFlightView()}
+          {selectedFlightType !== 'any' && renderOne2FlightView()}
+
+          <TravelInputField
+            error={travelData.error}
             label="Travlers"
             placeholder="No of People Travelling"
-            value={email}
-            editable={false}
-            blurOnSubmit={false}
-            onChangeText={handleEmaiChange}
-            onSubmitEditing={Keyboard.dismiss}
+            adults={travelData.adult}
+            infants={travelData.infants}
+            children={travelData.children}
+            onValueSelected={handleTravelDataChange}
           />
-          <InputField
-            error={emailError}
+          <TravelClassInputField
+            onValueSelected={handleTravelClassChange}
+            error={travelData.classError}
             label="Class"
             placeholder="Class for Flight"
-            value={email}
-            blurOnSubmit={false}
-            editable={false}
-            onChangeText={handleEmaiChange}
-            onSubmitEditing={Keyboard.dismiss}
+            value={travelData.travelClass}
           />
         </View>
       );
@@ -194,35 +292,27 @@ const SearchScreen: React.FC<SearchScreenProps> = ({navigation}) => {
     if (selectedTab === 'bus')
       return (
         <View style={{marginVertical: dimensions.margin.medium}}>
-          <InputField
-            error={orderIdError}
-            value={orderId}
+          <BusInputField
+            error={busData.fromError}
+            value={busData.from}
             label="From"
             placeholder="Leaving From (City)"
-            editable={false}
-            blurOnSubmit={false}
-            onPress={() => {}}
-            onChangeText={handleOrderIdChange}
+            onValueSelected={handleBusFromChange}
           />
-          <InputField
-            error={emailError}
+          <BusInputField
+            error={busData.toError}
+            value={busData.to}
             label="To"
             placeholder="Leaving To (City)"
-            value={email}
-            editable={false}
-            blurOnSubmit={false}
-            onChangeText={handleEmaiChange}
-            onSubmitEditing={Keyboard.dismiss}
+            onValueSelected={handleBusToChange}
           />
 
-          <InputField
-            error={emailError}
+          <DateInputField
+            error={busData.departDateError}
             label="Date"
             placeholder="Date"
-            value={email}
-            blurOnSubmit={false}
-            onChangeText={handleEmaiChange}
-            onSubmitEditing={Keyboard.dismiss}
+            value={busData.departDate}
+            onValueSelected={handleBusDepartDateChange}
           />
         </View>
       );
@@ -233,24 +323,20 @@ const SearchScreen: React.FC<SearchScreenProps> = ({navigation}) => {
       return (
         <View style={{marginVertical: dimensions.margin.medium}}>
           <InputField
-            error={orderIdError}
             value={'Pakistani'}
             label="Nationaliy"
             placeholder="Pakistani"
             editable={false}
             blurOnSubmit={false}
             onPress={() => {}}
-            onChangeText={handleOrderIdChange}
+            onChangeText={() => {}}
           />
-          <InputField
-            error={emailError}
+          <VisaInputField
+            error={visaData.visaError}
             label="Visa"
             placeholder="Visa for?"
-            value={email}
-            editable={false}
-            blurOnSubmit={false}
-            onChangeText={handleEmaiChange}
-            onSubmitEditing={Keyboard.dismiss}
+            value={visaData.visa}
+            onValueSelected={handleVisaChange}
           />
         </View>
       );
