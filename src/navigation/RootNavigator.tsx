@@ -13,6 +13,7 @@ import SupportScreen from '../screens/support';
 import ContactSupportScreen from '../screens/contact_support';
 import WebViewScreen from '../screens/WebViewScreen';
 import ContactUsScreen from '../screens/contactus';
+import ListingScreen from '../screens/listing';
 
 export const Stack = createNativeStackNavigator();
 export const navigationRef =
@@ -74,6 +75,11 @@ const RootNavigator = () => {
               <Stack.Screen
                 name={ScreenName.ContactUs}
                 component={ContactUsScreen}
+                options={{headerBackTitle: 'Back', headerShown: true}} // Custom back button label
+              />
+              <Stack.Screen
+                name={ScreenName.Listing}
+                component={ListingScreen}
                 options={{headerBackTitle: 'Back', headerShown: true}} // Custom back button label
               />
             </>

@@ -9,4 +9,5 @@ export const ScreenName = {
   ContactUs: 'ContactUs',
   ProfileScreen: 'ProfileScreen',
   SearchScreen: 'SearchScreen',
+  Listing: 'ListingScreen',
 };

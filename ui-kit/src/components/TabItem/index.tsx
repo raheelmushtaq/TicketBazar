@@ -26,7 +26,6 @@ const TabItem = ({
   title,
   icon,
   selected,
-
   selectOrUnSelectItem,
   textStyle,
   containerStyle,

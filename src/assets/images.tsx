@@ -31,4 +31,5 @@ export const images = {
   trash: require('../assets/images/trash.png'),
   add: require('../assets/images/add.png'),
   minus: require('../assets/images/minus.png'),
+  next: require('../assets/images/next.png'),
 };

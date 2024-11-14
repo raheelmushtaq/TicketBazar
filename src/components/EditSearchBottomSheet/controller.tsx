@@ -8,25 +8,51 @@ import {
   VisaDataItem,
 } from '../../types/SearchTypes';
 import useSelectedOptionsStore from '../../store/useSelectedOptionsStore';
-import {useNavigation} from '@react-navigation/native';
-import {ScreenName} from '../../constants/constants.screens';
 
 const useController = () => {
-  const navigation = useNavigation();
   const {
     type: savedType,
     data: savedData,
-    saveData,
+    travelData: savedTravelData,
+    saveData: onSave,
     flighType: savedFlightType,
   } = useSelectedOptionsStore();
-  const [busData, setbusData] = useState<BusDataItem>({
-    from: '',
-    to: '',
-    departDate: new Date(),
-  });
-  const [visaData, setVisaData] = useState<VisaDataItem>({
-    visa: '',
-  });
+
+  // Type guards for individual types
+  const isBusDataItem = (data: any): data is BusDataItem => {
+    return data;
+  };
+  const isVisaDataItem = (data: any): data is VisaDataItem => {
+    return data;
+  };
+  const isFlightDataItem = (data: any): data is FlightDataItem => {
+    return data
+      ? data
+      : {
+          from: '',
+          to: '',
+          departDate: new Date(),
+        };
+  };
+  const isMultiFlightDataItem = (data: any): data is FlightDataItem[] => {
+    return Array.isArray(data) && data.every(isFlightDataItem);
+  };
+  const [busData, setbusData] = useState<BusDataItem>(
+    isBusDataItem(savedData)
+      ? savedData
+      : {
+          from: '',
+          to: '',
+          departDate: new Date(),
+        },
+  );
+  const [visaData, setVisaData] = useState<VisaDataItem>(
+    isVisaDataItem(savedData)
+      ? savedData
+      : {
+          visa: '',
+        },
+  );
 
   const [travelData, setTravelData] = useState<TravelsData>({
     adult: 0,
@@ -37,24 +63,19 @@ const useController = () => {
 
   const [selectedTab, setSelectedTab] = useState<TabType>('flight');
 
-  const [flightData, setFlightData] = useState<FlightDataItem>({
-    from: '',
-    to: '',
-    departDate: new Date(),
-  });
+  const [flightData, setFlightData] = useState<FlightDataItem>(
+    isFlightDataItem(savedData)
+      ? savedData
+      : {
+          from: '',
+          to: '',
+          departDate: new Date(),
+        },
+  );
 
-  const [mutiFlightData, setMultiFlightData] = useState<FlightDataItem[]>([
-    {
-      from: '',
-      to: '',
-      departDate: new Date(),
-    },
-    {
-      from: '',
-      to: '',
-      departDate: new Date(),
-    },
-  ]);
+  const [mutiFlightData, setMultiFlightData] = useState<FlightDataItem[]>(
+    isMultiFlightDataItem(savedData) ? savedData : [],
+  );
 
   const [selectedFlightType, setSelectedFlightType] =
     useState<FlightType>('one');
@@ -313,7 +334,7 @@ const useController = () => {
     setMultiFlightData([...data]);
     return isValid;
   };
-  const moveToSearchListScreen = () => {
+  const saveFlightData = (onDataSaved: () => void) => {
     var error = false;
     if (selectedTab === 'bus') {
       error = !validateBusData();
@@ -341,8 +362,8 @@ const useController = () => {
       } else if (selectedTab === 'visa') {
         data = visaData;
       }
-      saveData(selectedTab, selectedFlightType, data, travelData);
-      navigation.navigate(ScreenName.Listing);
+      onSave(selectedTab, selectedFlightType, data, travelData);
+      onDataSaved();
     }
   };
 
@@ -371,7 +392,7 @@ const useController = () => {
     handleMultiFlightFromChange,
     handleMultiFlightToChange,
     handleMultiFlightsDepartDateChange,
-    moveToSearchListScreen,
+    saveFlightData,
   };
 };
 

@@ -31,6 +31,10 @@ import TravelInputField from '../../components/TravelInputField';
 import TravelClassInputField from '../../components/TravelClassInputField';
 import BusInputField from '../../components/BusInputField';
 import VisaInputField from '../../components/VisaInputField';
+import FlightView from '../../components/FlightsView';
+import {FlightType} from '../../types/SearchTypes';
+import BusView from '../../components/BusView';
+import VisaView from '../../components/VisaView';
 
 type SearchScreenNavigationProp = StackNavigationProp<
   RootStackParamList,
@@ -67,6 +71,7 @@ const SearchScreen: React.FC<SearchScreenProps> = ({navigation}) => {
     handleMultiFlightFromChange,
     handleMultiFlightToChange,
     handleMultiFlightsDepartDateChange,
+    moveToSearchListScreen,
   } = useController();
 
   const renderTabView = () => {
@@ -99,247 +104,52 @@ const SearchScreen: React.FC<SearchScreenProps> = ({navigation}) => {
       </View>
     );
   };
-
   const renderFlightView = () => {
-    const renderOne2FlightView = () => {
-      return (
-        <>
-          <FlightInputField
-            error={flightData.fromError}
-            label="From"
-            placeholder="Flying From (City or Airport)"
-            value={flightData.from}
-            onValueSelected={handleFlightFromChange}
-          />
-          <FlightInputField
-            error={flightData.toError}
-            label="To"
-            placeholder="Flying To (City or Airport)"
-            value={flightData.to}
-            onValueSelected={handleFlightToChange}
-          />
-
-          <DateInputField
-            error={flightData.departDateError}
-            label="Departing"
-            placeholder="Date to Depart"
-            value={flightData.departDate}
-            onValueSelected={handleFlightDepartDateChange}
-          />
-          {selectedFlightType === 'two' && (
-            <DateInputField
-              error={flightData.returnDateError}
-              label="Returning"
-              placeholder="Date to Return"
-              value={flightData.returnDate || new Date()}
-              onValueSelected={handleFlightReturnDateChange}
-            />
-          )}
-        </>
-      );
-    };
-    const renderMultiFlightView = () => {
-      return (
-        <>
-          {mutiFlightData.map((item, index) => {
-            return (
-              <>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    alignItems: 'center',
-                    marginTop: dimensions.margin.large,
-                  }}>
-                  <Text
-                    style={{
-                      fontSize: typography.fontSizes.md,
-                      color: colors.black,
-                      flex: 1,
-                    }}>
-                    Flight {index + 1}
-                  </Text>
-
-                  {index >= 2 && (
-                    <TouchableComponent
-                      containerStyle={{padding: dimensions.padding.small}}
-                      onPress={() => {
-                        removeDestination(index);
-                      }}>
-                      <Image
-                        style={{height: 16, width: 16, resizeMode: 'contain'}}
-                        source={images.trash}
-                      />
-                    </TouchableComponent>
-                  )}
-                </View>
-                <FlightInputField
-                  error={item.fromError}
-                  value={item.from}
-                  label="From"
-                  placeholder="Flying From (City or Airport)"
-                  onValueSelected={text =>
-                    handleMultiFlightFromChange(text, index)
-                  }
-                />
-                <FlightInputField
-                  error={item.toError}
-                  label="To"
-                  placeholder="Flying To (City or Airport)"
-                  value={item.to}
-                  onValueSelected={text =>
-                    handleMultiFlightToChange(text, index)
-                  }
-                />
-
-                <DateInputField
-                  error={item.departDateError}
-                  label="Departing"
-                  placeholder="Date to Depart"
-                  value={item.departDate}
-                  onValueSelected={date =>
-                    handleMultiFlightsDepartDateChange(date, index)
-                  }
-                />
-              </>
-            );
-          })}
-          {mutiFlightData.length <= 4 && (
-            <ImageButton
-              containerStyle={{
-                marginTop: dimensions.margin.medium,
-                width: '50%',
-              }}
-              iconLocation={'left'}
-              onPress={addMultiFlightData}
-              type={'primary'}
-              icon={images.plus}
-              title="Add Destintation"
-            />
-          )}
-          <Separator showTransparent={true} showVertical={true} height={20} />
-        </>
-      );
-    };
     if (selectedTab === 'flight')
       return (
-        <View style={{marginVertical: dimensions.margin.medium}}>
-          <View
-            style={{
-              flexDirection: 'row',
-              flexWrap: 'wrap',
-            }}>
-            <Button
-              type={selectedFlightType === 'one' ? 'primary' : 'secondary'}
-              title="One Way"
-              buttonStyle={{paddingVertical: dimensions.padding.small}}
-              onPress={() => {
-                setSelectedFlightType('one');
-              }}
-            />
-            <Separator
-              showTransparent
-              showVertical={false}
-              width={dimensions.margin.small}
-            />
-            <Button
-              type={selectedFlightType === 'two' ? 'primary' : 'secondary'}
-              title="Return"
-              buttonStyle={{paddingVertical: dimensions.padding.small}}
-              onPress={() => {
-                setSelectedFlightType('two');
-              }}
-            />
-
-            <Separator
-              showTransparent
-              showVertical={false}
-              width={dimensions.margin.small}
-            />
-            <Button
-              type={selectedFlightType === 'any' ? 'primary' : 'secondary'}
-              title="Multi City"
-              buttonStyle={{paddingVertical: dimensions.padding.small}}
-              onPress={() => {
-                setSelectedFlightType('any');
-              }}
-            />
-          </View>
-
-          {selectedFlightType === 'any' && renderMultiFlightView()}
-          {selectedFlightType !== 'any' && renderOne2FlightView()}
-
-          <TravelInputField
-            error={travelData.error}
-            label="Travlers"
-            placeholder="No of People Travelling"
-            adults={travelData.adult}
-            infants={travelData.infants}
-            children={travelData.children}
-            onValueSelected={handleTravelDataChange}
-          />
-          <TravelClassInputField
-            onValueSelected={handleTravelClassChange}
-            error={travelData.classError}
-            label="Class"
-            placeholder="Class for Flight"
-            value={travelData.travelClass}
-          />
-        </View>
+        <FlightView
+          flightData={flightData}
+          mutiFlightData={mutiFlightData}
+          travelData={travelData}
+          handleFlightDepartDateChange={handleFlightDepartDateChange}
+          handleFlightFromChange={handleFlightFromChange}
+          handleFlightReturnDateChange={handleFlightReturnDateChange}
+          handleFlightToChange={handleFlightToChange}
+          selectedFlightType={selectedFlightType}
+          setSelectedFlightType={(text: FlightType) => {
+            setSelectedFlightType(text);
+          }}
+          handleMultiFlightFromChange={handleMultiFlightFromChange}
+          handleMultiFlightToChange={handleMultiFlightToChange}
+          handleMultiFlightsDepartDateChange={
+            handleMultiFlightsDepartDateChange
+          }
+          handleTravelClassChange={handleTravelClassChange}
+          handleTravelDataChange={handleTravelDataChange}
+          removeDestination={removeDestination}
+          addMultiFlightData={addMultiFlightData}
+        />
       );
     return null;
   };
   const renderBusView = () => {
     if (selectedTab === 'bus')
       return (
-        <View style={{marginVertical: dimensions.margin.medium}}>
-          <BusInputField
-            error={busData.fromError}
-            value={busData.from}
-            label="From"
-            placeholder="Leaving From (City)"
-            onValueSelected={handleBusFromChange}
-          />
-          <BusInputField
-            error={busData.toError}
-            value={busData.to}
-            label="To"
-            placeholder="Leaving To (City)"
-            onValueSelected={handleBusToChange}
-          />
-
-          <DateInputField
-            error={busData.departDateError}
-            label="Date"
-            placeholder="Date"
-            value={busData.departDate}
-            onValueSelected={handleBusDepartDateChange}
-          />
-        </View>
+        <BusView
+          busData={busData}
+          handleBusDepartDateChange={handleBusDepartDateChange}
+          handleBusFromChange={handleBusFromChange}
+          handleBusToChange={handleBusToChange}
+        />
       );
     return null;
   };
   const renderVisaView = () => {
     if (selectedTab === 'visa')
       return (
-        <View style={{marginVertical: dimensions.margin.medium}}>
-          <InputField
-            value={'Pakistani'}
-            label="Nationaliy"
-            placeholder="Pakistani"
-            editable={false}
-            blurOnSubmit={false}
-            onPress={() => {}}
-            onChangeText={() => {}}
-          />
-          <VisaInputField
-            error={visaData.visaError}
-            label="Visa"
-            placeholder="Visa for?"
-            value={visaData.visa}
-            onValueSelected={handleVisaChange}
-          />
-        </View>
+        <VisaView visaData={visaData} handleVisaChange={handleVisaChange} />
       );
+
     return null;
   };
   return (
@@ -374,7 +184,13 @@ const SearchScreen: React.FC<SearchScreenProps> = ({navigation}) => {
             {renderBusView()}
             {renderVisaView()}
 
-            <Button title="Search" onPress={() => {}} type={'primary'} />
+            <Button
+              title="Search"
+              onPress={() => {
+                moveToSearchListScreen();
+              }}
+              type={'primary'}
+            />
           </View>
         </CardView>
       </ScrollView>

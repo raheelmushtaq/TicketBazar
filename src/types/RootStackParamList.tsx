@@ -7,4 +7,5 @@ export type RootStackParamList = {
   ContactSupport: undefined;
   WebViewScreen: {title: string; url: string};
   ContactUs: undefined;
+  ListingScreen: undefined;
 };
